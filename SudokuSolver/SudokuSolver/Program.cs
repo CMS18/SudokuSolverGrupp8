@@ -27,7 +27,7 @@ namespace SudokuSolver
             {
                 for (int j = 0; j < 9; j++)
                 {
-
+                    
                     if (boardArray[i, j] == 0) //om understreck istället för noll
                     {
                         Console.Write("_");
@@ -69,13 +69,10 @@ namespace SudokuSolver
                 boardArray[row, i % 9] = num;   //fyll varje rad för rad med index 0-8
 
 
-                //Thread.Sleep(450); //För att se arrayen
+                //Thread.Sleep(100); //För att se arrayen
                 //PrintBoardArray(boardArray);
             }
 
         }
-
-
-
     }
 }
