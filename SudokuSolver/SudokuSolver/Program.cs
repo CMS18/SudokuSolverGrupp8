@@ -18,6 +18,13 @@ namespace SudokuSolver
 
             PrintBoardArray(boardArray);
 
+            //metod för att kolla rad
+            //metod för att kolla kolumn
+            //metod för att kolla "box"
+            Sudoku.Solve(boardArray);
+
+
+
             Console.ReadLine();
         }
 
