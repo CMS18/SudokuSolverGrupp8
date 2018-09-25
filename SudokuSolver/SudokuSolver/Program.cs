@@ -15,10 +15,10 @@ namespace SudokuSolver
             string sudokuString = "619030040270061008000047621486302079000014580031009060005720806320106057160400030";
 
             FillBoardArrayWithSudokuString(sudokuString, boardArray);
-
+            boardArray = SolveArray(boardArray);
             PrintBoardArray(boardArray);
 
-            Console.ReadLine();
+            Console.ReadKey();
         }
 
         private static void PrintBoardArray(int[,] boardArray)
@@ -27,7 +27,6 @@ namespace SudokuSolver
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    
                     if (boardArray[i, j] == 0) //om understreck istället för noll
                     {
                         Console.Write("_");
@@ -37,8 +36,6 @@ namespace SudokuSolver
                         Console.Write(boardArray[i, j]);
                     }
 
-                    //Console.Write(boardArray[i, j]);    // om 0 istället för understreck
-
                     Console.Write(" ");
 
                     if (j == 2 || j == 5)
@@ -46,6 +43,7 @@ namespace SudokuSolver
                         Console.Write("| ");
                     }
                 }
+
                 Console.WriteLine();
 
                 if (i == 2 || i == 5)
@@ -57,6 +55,114 @@ namespace SudokuSolver
             Console.WriteLine();
         }
 
+        private static int[,] SolveArray(int[,] boardArray)
+        {
+            bool placed;
+            while (true)
+            {
+                placed = false;
+                for (int row = 0; row < 9; row++)
+                {
+                    for (int col = 0; col < 9; col++)
+                    {
+                        if (boardArray[row, col] == 0)//fixa row, col senare.
+                        {
+                            string numbers = GetRowColBlockNum(boardArray, row, col);
+                            string possibleSolutions = "";
+                            for (int i = 1; i < 10; i++)
+                            {
+                                if (!numbers.Contains(i.ToString()))
+                                {
+                                    possibleSolutions += i.ToString();
+                                }
+                            }
+                            if (possibleSolutions.Length == 1)
+                            {
+                                boardArray[row, col] = int.Parse(possibleSolutions);
+                                placed = true;
+                            }
+                        }
+                    }
+                }
+                if (!placed)
+                {
+                    break;
+                }
+            }
+            return boardArray;
+        }
+
+        private static string GetRowColBlockNum(int[,] boardArray, int row, int col)
+        {
+            string allNumbers = "";
+            allNumbers += GetRow(boardArray, row);
+            allNumbers += GetCol(boardArray, col);
+            allNumbers += GetBlock(boardArray, row, col);
+            return allNumbers;
+        }
+
+        private static string GetBlock(int[,] boardArray, int startRow, int startCol)
+        {
+            string numbersInBlock = "";
+
+            startCol = (startCol > -1 && startCol < 3 ? startCol = 0 :
+                        startCol > 2 && startCol < 6 ? startCol = 3 :
+                        startCol > 5 && startCol < 9 ? startCol = 6 : startCol = 100);
+
+            startRow = (startRow > -1 && startRow < 3 ? startRow = 0 :
+                        startRow > 2 && startRow < 6 ? startRow = 3 :
+                        startRow > 5 && startRow < 9 ? startRow = 6 : startRow = 100);
+
+            //if (startRow > -1 && startRow < 3)
+            //{
+            //    startRow = 0;
+            //    Console.WriteLine("kördes1row");
+            //}
+            //else if (startRow > 2 && startRow < 6)
+            //{
+            //    startRow = 3;
+            //    Console.WriteLine("kördes2row");
+            //}
+            //else if (startRow > 5 && startRow < 9)
+            //{
+            //    startRow = 6;
+            //    Console.WriteLine("kördes3row");
+            //}
+
+            for (int row = 0; row < 3; row++)
+            {
+                for (int col = 0; col < 3; col++)
+                {
+                    numbersInBlock += boardArray[startRow + row, startCol + col].ToString();
+                }
+            }
+            return numbersInBlock;
+        }
+
+        private static string GetRow(int[,] boardArray, int row)
+        {
+            string numbersInRow = "";
+
+            for (int i = 0; i < 9; i++)
+            {
+                numbersInRow += boardArray[row, i].ToString();
+            }
+
+            return numbersInRow;
+        }
+
+        private static string GetCol(int[,] boardArray, int col)
+        {
+            string numbersInCol = "";
+
+            for (int i = 0; i < 9; i++)
+            {
+                numbersInCol += boardArray[i, col].ToString();
+            }
+
+            return numbersInCol;
+        }
+
         private static void FillBoardArrayWithSudokuString(string sudokuString, int[,] boardArray)
         {
             int row = -1;
@@ -66,13 +172,12 @@ namespace SudokuSolver
                 int num = int.Parse(sudokuString[i].ToString());
                 if (i % 9 == 0) { row++; }
 
-                boardArray[row, i % 9] = num;   //fyll varje rad för rad med index 0-8
+                boardArray[row, i % 9] = num;//fyll varje rad för rad med index 0-8
 
 
                 //Thread.Sleep(100); //För att se arrayen
                 //PrintBoardArray(boardArray);
             }
-
         }
     }
 }
