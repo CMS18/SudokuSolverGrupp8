@@ -9,7 +9,7 @@ namespace SudokuSolver
 {
     class Program
     {
-        public static int test = 0;
+        public static int counter = 0;
         private const string easy1 = "003020600900305001001806400008102900700000008006708200002609500800203009005010300";
         private const string easy2 = "619030040270061008000047621486302079000014580031009060005720806320106057160400030";
         private const string medium1 = "037060000205000800006908000000600024001503600650009000000302700009000402000050360";
@@ -34,9 +34,8 @@ namespace SudokuSolver
             {
                 Solve(boardArray);
                 PrintBoardArray(boardArray);
-                Console.WriteLine("Så här långt kom jag på " + test + " försök");
+                Console.WriteLine("Så här långt kom jag på " + counter + " försök");
             }
-
             Console.ReadKey();
         }
 
@@ -48,7 +47,7 @@ namespace SudokuSolver
                 {
                     if (boardArray[row, col] == 0)
                     {
-                        test++;
+                        counter++;
                         for (int num = 9; num > 0; num--)
                         {
                             string numbers = GetRowColBlockNum(boardArray, row, col);
