@@ -15,7 +15,7 @@ namespace SudokuSolver
             string sudokuString = "037060000205000800006908000000600024001503600650009000000302700009000402000050360";
 
             FillBoardArrayWithSudokuString(sudokuString, boardArray);
-            boardArray = SolveArray(boardArray);
+            SolveArray(boardArray);
             PrintBoardArray(boardArray);
 
             Console.ReadKey();
@@ -55,7 +55,7 @@ namespace SudokuSolver
             Console.WriteLine();
         }
 
-        private static int[,] SolveArray(int[,] boardArray)
+        private static void SolveArray(int[,] boardArrayen)
         {
             bool placed;
             while (true)
@@ -65,9 +65,9 @@ namespace SudokuSolver
                 {
                     for (int col = 0; col < 9; col++)
                     {
-                        if (boardArray[row, col] == 0)//fixa row, col senare.
+                        if (boardArrayen[row, col] == 0)//fixa row, col senare.
                         {
-                            string numbers = GetRowColBlockNum(boardArray, row, col);
+                            string numbers = GetRowColBlockNum(boardArrayen, row, col);
                             string possibleSolutions = "";
                             for (int i = 1; i < 10; i++)
                             {
@@ -80,37 +80,59 @@ namespace SudokuSolver
                             //Console.WriteLine("ran: "+times);
                             if (possibleSolutions.Length == 1)
                             {
-                                boardArray[row, col] = int.Parse(possibleSolutions);
+                                boardArrayen[row, col] = int.Parse(possibleSolutions);
                                 placed = true;
                                 //Thread.Sleep(100);
                                 //Console.Clear();
                                 //PrintBoardArray(boardArray);
                             }
+
                         }
                     }
                 }
                 if (!placed)
                 {
-                    //boardArray = SolveHarderArrays(boardArray);
+                    SolveHarderArrays(boardArrayen);
                     break;
                 }
             }
-            return boardArray;
+            //return boardArray;
         }
 
-        private static int[,] SolveHarderArrays(int[,] boardArray)
+        private static void SolveHarderArrays(int[,] boardArray)
         {
+            //int[,] boardArrayCopy = boardArray;
+
+            int[,] boardArrayCopy = (int[,])boardArray.Clone();
             for (int row = 0; row < 9; row++)
             {
                 for (int col = 0; col < 9; col++)
                 {
-                    if (boardArray[row, col] == 0)
+                    if (boardArrayCopy[row, col] == 0)
                     {
-                        boardArray[row, col] = 9;
+                        //boardArrayCopy[row, col] = 9;
+                        string numbers = GetRowColBlockNum(boardArrayCopy, row, col);
+                        string possibleSolutions = "";
+                        for (int i = 1; i < 10; i++)
+                        {
+                            if (!numbers.Contains(i.ToString()))
+                            {
+                                possibleSolutions += i.ToString();
+                            }
+                        }
+                        for (int i = 0; i < possibleSolutions.Length; i++)
+                        {
+
+                            int[,] boardArrayCopy2 = (int[,])boardArrayCopy.Clone();
+
+                            boardArrayCopy2[row, col] = int.Parse(possibleSolutions[i].ToString());
+
+                            SolveArray(boardArrayCopy2);
+                        }
+                        //Console.WriteLine(possibleSolutions);
                     }
                 }
             }
-            return boardArray;
         }
 
         private static string GetRowColBlockNum(int[,] boardArray, int row, int col)
@@ -134,22 +156,6 @@ namespace SudokuSolver
                         startRow > 2 && startRow < 6 ? startRow = 3 :
                         startRow > 5 && startRow < 9 ? startRow = 6 : startRow = 100);
 
-            //if (startRow > -1 && startRow < 3)
-            //{
-            //    startRow = 0;
-            //    Console.WriteLine("kördes1row");
-            //}
-            //else if (startRow > 2 && startRow < 6)
-            //{
-            //    startRow = 3;
-            //    Console.WriteLine("kördes2row");
-            //}
-            //else if (startRow > 5 && startRow < 9)
-            //{
-            //    startRow = 6;
-            //    Console.WriteLine("kördes3row");
-            //}
-
             for (int row = 0; row < 3; row++)
             {
                 for (int col = 0; col < 3; col++)
@@ -167,6 +173,7 @@ namespace SudokuSolver
             for (int i = 0; i < 9; i++)
             {
                 numbersInRow += boardArray[row, i].ToString();
+                //Console.WriteLine("asdasd " + numbersInRow);
             }
 
             return numbersInRow;
