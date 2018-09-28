@@ -28,14 +28,10 @@ namespace SudokuSolver
 
             string sudokuString = diabolic1;
 
-            bool parsed = false;
-            FillBoardArrayWithSudokuString(sudokuString, boardArray, ref parsed);
-            if (parsed)
-            {
-                Solve(boardArray);
-                PrintBoardArray(boardArray);
-                Console.WriteLine("Så här långt kom jag på " + counter + " försök");
-            }
+            FillBoardArrayWithSudokuString(sudokuString, boardArray);
+            Solve(boardArray);
+            PrintBoardArray(boardArray);
+            Console.WriteLine("Så här långt kom jag på " + counter + " försök");
             Console.ReadKey();
         }
 
@@ -51,7 +47,6 @@ namespace SudokuSolver
                         for (int num = 9; num > 0; num--)
                         {
                             string numbers = GetRowColBlockNum(boardArray, row, col);
-
                             if (!numbers.Contains(num.ToString()))
                             {
                                 boardArray[row, col] = num;
@@ -157,29 +152,20 @@ namespace SudokuSolver
             return numbersInCol;
         }
 
-        private static void FillBoardArrayWithSudokuString(string sudokuString, int[,] boardArray, ref bool parsed)
+        private static void FillBoardArrayWithSudokuString(string sudokuString, int[,] boardArray)
         {
             int row = -1;
             int test = 0;
 
-            parsed = true;
             for (int i = 0; i < sudokuString.Length; i++)
             {
-                if (!(int.TryParse(sudokuString[i].ToString(), out test)))
-                {
-                    parsed = false;
-                }
-            }
-            if (parsed)
-            {
-                for (int i = 0; i < sudokuString.Length; i++)
+                if (i % 9 == 0) { row++; }
+                if (int.TryParse(sudokuString[i].ToString(), out test))
                 {
                     int num = int.Parse(sudokuString[i].ToString());
-                    if (i % 9 == 0) { row++; }
-                    boardArray[row, i % 9] = num;
+                    boardArray[row, i % 9] = num;//fyll varje rad för rad med index 0-8
                 }
             }
-            else { Console.WriteLine("Felaktigt bräde"); }
         }
     }
 }
