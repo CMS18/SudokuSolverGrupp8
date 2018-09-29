@@ -8,29 +8,6 @@ namespace SudokuSolver
     {
         static string mustContainAllCharacters = "123456789";
 
-        public static void Solve(int[,] sudokuBoard)
-        {
-            //CHECK ROWS
-            //CHECK COLUMNS
-            //CHECK BOXES
-            if (AreAllRowsComplete(sudokuBoard) && AreAllBoxesComplete(sudokuBoard) && AreAllColumnsComplete(sudokuBoard))
-            {
-                //Console.WriteLine("Sudoku solved");
-            }
-            else
-            {
-                //Flyttar ut lite printar till Main
-
-                //Console.WriteLine("Sudoku solving...");
-                //Console.WriteLine("");
-                //Console.WriteLine("Is sudoku solvable? true/false ");
-                //Console.WriteLine("");
-                //Console.WriteLine("");
-                Console.WriteLine("---  " + SolveBoard(sudokuBoard) + "  ---");
-            }
-        }
-
-
         public static void PrintBoardArray(int[,] boardArray)
         {
             for (int i = 0; i < 9; i++)
@@ -66,10 +43,10 @@ namespace SudokuSolver
             }
         }
 
-
-        private static bool SolveBoard(int[,] sudokuBoard)
+        public static bool SolveBoard(int[,] sudokuBoard)
         {
             Point nextPoint = FindNextUnassigned(sudokuBoard);
+
             if (nextPoint == null)
             {
                 PrintBoardArray(sudokuBoard);
@@ -77,40 +54,40 @@ namespace SudokuSolver
                 //Behöver man verkligen Dubbelkolla?
                 if (AreAllRowsComplete(sudokuBoard) && AreAllBoxesComplete(sudokuBoard) && AreAllColumnsComplete(sudokuBoard))
                 {
-                    // If there is no unassigned location, we are done 
+                    //Finns det inget kvar att fylla i SolveBoard return true;
                     return true;
                 }
             }
 
+            //Döper om variablerna för att använda kortare namn
             int row = nextPoint.row;
             int column = nextPoint.column;
 
-            //Använd alla potentiella siffror som ett sdukou bräde kan innehålla
-            for (int num = 1; num <= 9; num++)
+            //Använd alla potentiella siffror som ett sudoku bräde kan innehålla
+            for (int guess = 1; guess <= 9; guess++)
             {
-                if (IsNumberAllowed(sudokuBoard, row, column, num))
+                if (IsNumberAllowed(sudokuBoard, row, column, guess))
                 {
-                    sudokuBoard[row, column] = num;
-                    if (SolveBoard(sudokuBoard))
+                    sudokuBoard[row, column] = guess;
+                    if (SolveBoard(sudokuBoard))//Det här startar själva Rekursionen och testar en "gren" av lösningsalternativ
                         return true;
 
-                    sudokuBoard[row, column] = 0;
+                    sudokuBoard[row, column] = 0;//Sätter värdet tillbaka till 0 om lösningen misslyckats
                 }
             }
 
-            return false;
+            return false; //backar i trädets gren om en gren av lösningar misslyckats
         }
 
         private static Point FindNextUnassigned(int[,] sudokuBoard)
         {
-
-            for (int j = 0; j < 9; j++)
+            for (int i = 0; i < 9; i++)
             {
-                for (int k = 0; k < 9; k++)
+                for (int j = 0; j < 9; j++)
                 {
-                    if (sudokuBoard[k, j] == 0)
+                    if (sudokuBoard[j, i] == 0)
                     {
-                        return new Point { row = k, column = j };
+                        return new Point { row = j, column = i };
                     }
                 }
             }

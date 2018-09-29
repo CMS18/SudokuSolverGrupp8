@@ -26,18 +26,18 @@ namespace SudokuSolver
 
         static void Main(string[] args)
         {
-            int[,] boardArray = new int[9, 9];
+            int[,] sudokuBoard = new int[9, 9];
             //string sudokuString = "619030040270061008000047621486302079000014580031009060005720806320106057160400030";
             //string sudokuString2 = diabolic2;
 
-            foreach (var stringBoard in SudokuTest)
+            foreach (var stringBoard in SudokuTest)//stringboard är elementet "key,value-pair"
             {
-                FillBoardArrayWithSudokuString(stringBoard.Value, boardArray);
+                FillBoardArrayWithSudokuString(stringBoard.Value, sudokuBoard);
 
                 //Sudoku.PrintBoardArray(boardArray);
                 Console.WriteLine();
                 Console.WriteLine("Is "+stringBoard.Key+" solvable?");
-                Sudoku.Solve(boardArray);
+                Console.WriteLine("---  " + Sudoku.SolveBoard(sudokuBoard) + "  ---");
                 Console.WriteLine();
                 Console.WriteLine("----------------------------");
             }
@@ -45,7 +45,7 @@ namespace SudokuSolver
             Console.ReadLine();
         }
 
-        private static void FillBoardArrayWithSudokuString(string sudokuString, int[,] boardArray)
+        private static void FillBoardArrayWithSudokuString(string sudokuString, int[,] sudokuBoard)
         {
             int row = -1;
 
@@ -58,7 +58,7 @@ namespace SudokuSolver
                 }
                 if (i % 9 == 0) { row++; }
 
-                boardArray[row, i % 9] = num;
+                sudokuBoard[row, i % 9] = num;
             }
 
         }
