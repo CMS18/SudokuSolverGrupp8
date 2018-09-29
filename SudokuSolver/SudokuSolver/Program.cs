@@ -9,59 +9,40 @@ namespace SudokuSolver
 {
     class Program
     {
+        static Dictionary<string, string> SudokuTest = new Dictionary<string, string>
+        {
+            {"easy1", "003020600900305001001806400008102900700000008006708200002609500800203009005010300" },
+            {"easy2","619030040270061008000047621486302079000014580031009060005720806320106057160400030"},
+            {"medium1", "037060000205000800006908000000600024001503600650009000000302700009000402000050360" },
+            {"diabolic1", "000000000000003085001020000000507000004000100090000000500000073002010000000040009" },
+            {"diabolic2", "900040000000010200370000005000000090001000400000705000000020100580300000000000000" },
+            {"zen", "000000000000000000000000000000000000000010000000000000000000000000000000000000000" },
+            {"unsolvable1", "..9.287..8.6..4..5..3.....46.........2.71345.........23.....5..9..4..8.7..125.3.." },
+            {"unsolvable2", ".9.3....1....8..46......8..4.5.6..3...32756...6..1.9.4..1......58..2....2....7.6." },
+            {"unsolvable3", "....41....6.....2...2......32.6.........5..417.......2......23..48......5.1..2..." },
+            {"unsolvable4", "9..1....4.14.3.8....3....9....7.8..18....3..........3..21....7...9.4.5..5...16..3" },
+            {"unsolvable5", ".4.1..35.............2.5......4.89..26.....12.5.3....7..4...16.6....7....1..8..2." },
+        };
+
         static void Main(string[] args)
         {
             int[,] boardArray = new int[9, 9];
-            string sudokuString = "619030040270061008000047621486302079000014580031009060005720806320106057160400030";
+            //string sudokuString = "619030040270061008000047621486302079000014580031009060005720806320106057160400030";
+            //string sudokuString2 = diabolic2;
 
-            FillBoardArrayWithSudokuString(sudokuString, boardArray);
+            foreach (var stringBoard in SudokuTest)
+            {
+                FillBoardArrayWithSudokuString(stringBoard.Value, boardArray);
 
-            PrintBoardArray(boardArray);
-
-            //metod för att kolla rad
-            //metod för att kolla kolumn
-            //metod för att kolla "box"
-            Sudoku.Solve(boardArray);
-
-
+                //Sudoku.PrintBoardArray(boardArray);
+                Console.WriteLine();
+                Console.WriteLine("Is "+stringBoard.Key+" solvable?");
+                Sudoku.Solve(boardArray);
+                Console.WriteLine();
+                Console.WriteLine("----------------------------");
+            }
 
             Console.ReadLine();
-        }
-
-        private static void PrintBoardArray(int[,] boardArray)
-        {
-            for (int i = 0; i < 9; i++)
-            {
-                for (int j = 0; j < 9; j++)
-                {
-                    
-                    if (boardArray[i, j] == 0) //om understreck istället för noll
-                    {
-                        Console.Write("_");
-                    }
-                    else
-                    {
-                        Console.Write(boardArray[i, j]);
-                    }
-
-                    //Console.Write(boardArray[i, j]);    // om 0 istället för understreck
-
-                    Console.Write(" ");
-
-                    if (j == 2 || j == 5)
-                    {
-                        Console.Write("| ");
-                    }
-                }
-                Console.WriteLine();
-
-                if (i == 2 || i == 5)
-                {
-                    Console.WriteLine("---------------------");
-
-                }
-            }
-            Console.WriteLine();
         }
 
         private static void FillBoardArrayWithSudokuString(string sudokuString, int[,] boardArray)
@@ -70,14 +51,14 @@ namespace SudokuSolver
 
             for (int i = 0; i < sudokuString.Length; i++)
             {
-                int num = int.Parse(sudokuString[i].ToString());
+                int num = 0;
+                if (int.TryParse(sudokuString[i].ToString(), out num) == false)
+                {
+                    num = 0;
+                }
                 if (i % 9 == 0) { row++; }
 
-                boardArray[row, i % 9] = num;   //fyll varje rad för rad med index 0-8
-
-
-                //Thread.Sleep(100); //För att se arrayen
-                //PrintBoardArray(boardArray);
+                boardArray[row, i % 9] = num;
             }
 
         }
