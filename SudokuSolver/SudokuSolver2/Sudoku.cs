@@ -7,8 +7,6 @@
     {
         public class Sudoku
         {
-            static string mustContainAllCharacters = "123456789";
-
             public static void PrintBoardArray(int[,] boardArray)
             {
                 for (int i = 0; i < 9; i++)
@@ -24,8 +22,6 @@
                         {
                             Console.Write(boardArray[i, j]);
                         }
-
-                        //Console.Write(boardArray[i, j]);    // om 0 istället för understreck
 
                         Console.Write(" ");
 
@@ -52,12 +48,8 @@
                 {
                     PrintBoardArray(sudokuBoard);
 
-                    //Behöver man verkligen Dubbelkolla?
-                    if (AreAllRowsComplete(sudokuBoard) && AreAllBoxesComplete(sudokuBoard) && AreAllColumnsComplete(sudokuBoard))
-                    {
                         //Finns det inget kvar att fylla i SolveBoard return true;
                         return true;
-                    }
                 }
 
                 //Döper om variablerna för att använda kortare namn
@@ -142,91 +134,6 @@
                 for (int i = 0; i < 9; i++)
                 {
                     if (sudokuBoard[i, column] == numberToAssign)
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            private static bool AreAllBoxesComplete(int[,] sudokuBoard)
-            {
-                for (int i = 1; i <= 7; i += 3)
-                {
-                    string boxValues = "";
-                    for (int j = 1; j <= 7; j += 3)
-                    {
-                        boxValues = GetBoxValues(i, j, sudokuBoard);
-                        if (!IsRowOrColumnOrBoxComplete(boxValues))
-                        {
-                            return false;
-                        }
-                    }
-                }
-
-                return true;
-            }
-
-            private static string GetBoxValues(int i, int j, int[,] sudokuBoard)
-            {
-                string boxValues = "";
-
-                for (int k = -1; k <= 1; k++)
-                {
-                    for (int l = -1; l <= 1; l++)
-                    {
-                        boxValues += sudokuBoard[i + k, j + l];
-                    }
-                }
-
-                return boxValues;
-            }
-
-            private static bool AreAllColumnsComplete(int[,] sudokuBoard)
-            {
-                for (int i = 0; i < 9; i++)
-                {
-                    string prepareColumns = "";
-                    for (int j = 0; j < 9; j++)
-                    {
-                        prepareColumns += sudokuBoard[j, i].ToString();
-                    }
-                    if (!IsRowOrColumnOrBoxComplete(prepareColumns))
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            private static bool AreAllRowsComplete(int[,] sudokuBoard)
-            {
-                for (int i = 0; i < 9; i++)
-                {
-                    string prepareRow = "";
-                    for (int j = 0; j < 9; j++)
-                    {
-                        prepareRow += sudokuBoard[i, j].ToString();
-                    }
-                    if (!IsRowOrColumnOrBoxComplete(prepareRow))
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            private static bool IsRowOrColumnOrBoxComplete(string value)
-            {
-
-                foreach (var c in value)
-                {
-                    int totalOf = value.Count(x => x == c);
-
-                    if (!mustContainAllCharacters.Contains(c.ToString()) && value.Count(x => x == c) != 1)
                     {
                         return false;
                     }

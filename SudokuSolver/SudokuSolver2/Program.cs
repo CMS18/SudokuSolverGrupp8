@@ -36,7 +36,7 @@ namespace SudokuSolver
             {
                 int[,] sudokuBoard = new int[9, 9];
 
-                foreach (var stringBoard in SudokuTest)//stringboard är elementet "key,value-pair"
+                foreach (var stringBoard in SudokuTest)//stringboard är elemecntet "key,value-pair"
                 {
                     FillBoardArrayWithSudokuString(stringBoard.Value, sudokuBoard);
 
